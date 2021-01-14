@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  crm:
+    image: crm
+    restart: always
+    build: ./
+    command: >
+      bash -c "python wait_for_postgres.py &&
+               ./manage.py migrate &&
+               ./manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    volumes: 
+      - ./:/code
+  postgres:
+    image: postgres:12.4
+    env_file:
+      - .env
+    volumes:
+      - ./postgresql/dumps:/code/dumps
+      - ./postgresql/data:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - "${POSTGRES_PORT}:5432"
