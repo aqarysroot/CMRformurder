@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",  # token authentication
     "django_filters",  # for filtering rest endpoints
     'rest_framework_xml',
+    'drf_yasg', # swagger
     # Local Apps
     'users',
     'orders',

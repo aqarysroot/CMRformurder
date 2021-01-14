@@ -93,6 +93,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             Target.objects.create(username=target.username, order=order, age=target.age, time_to_death=datetime.now() + timedelta(hours=count_hours))
         order.finish_time = datetime.now() + timedelta(hours=count_hours)
         order.save()
+
         return_data = {
             'start_date': datetime.now(),
             'end_date': datetime.now() + timedelta(hours=count_hours),
@@ -107,5 +108,9 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
 
-    def create(self, request):
-        return Response({'user': str(request.user), 'amount': request.data['amount']})            
+    def retrieve(self,request,pk=None):
+        user = request.user
+        payment = Payment.objects.filter(user=user,pk=pk)
+        return Response({'Payment': str(user),'amount': payment.cost})
+
+            

@@ -9,6 +9,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     finish_time = models.DateTimeField(auto_now=False, auto_now_add=False, null=True)
     status = models.CharField(max_length=4, choices=D.Status.choices, default=D.Status.WAITING)
+    
 
 class Target(models.Model):
     username = models.CharField(max_length=50)
@@ -23,8 +24,8 @@ class Target(models.Model):
         super(Target, self).save(*args, **kwargs)
 
 class Payment(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user',null=True)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     purchased = models.IntegerField(default=0)
     cost = models.IntegerField(default=0)
     
